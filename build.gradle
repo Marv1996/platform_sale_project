@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version '1.1.0'
+    id "org.springdoc.openapi-gradle-plugin" version "1.6.0"
+    id 'org.hidetake.swagger.generator' version '2.19.2'
+    id "com.avast.gradle.docker-compose" version "0.15.0"
+}
+
+group = 'org.sale'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //FlyWey
+    implementation "org.flywaydb:flyway-core"
+    implementation "org.flywaydb:flyway-mysql"
+    compileOnly "org.flywaydb:flyway-mysql"
+
+    //Swagger
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openApiVersion"
+    swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.34'
+
+    //Jwt
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.0'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.2.0'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml']
+}
+
+test {
+    useJUnitPlatform()
+}

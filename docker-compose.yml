@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql
+    build:
+      context: ./mySql
+      dockerfile: Dockerfile
+      args:
+        - MYSQL_DATABASE=platform_sale
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=java
+        - MYSQL_ROOT_PASSWORD=java
+    ports:
+      - "127.0.0.1:3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=java
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    hostname: db
+  platform_sale_java_spring_project_new-service:
+    image: platform-sale
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    hostname: platform-sale
+    ports:
+      - "127.0.0.1:9098:9098"
+    environment:
+      - DB_HOSTNAME=db
+    depends_on:
+      mysql:
+        condition: service_started
