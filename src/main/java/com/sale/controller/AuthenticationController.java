@@ -1,6 +1,5 @@
 package com.sale.controller;
 
-import com.sale.common.constants.SecurityConstants;
 import com.sale.dto.request.LoginRequest;
 import com.sale.exceptions.userexceptions.UserApiException;
 import com.sale.service.TokenService;
