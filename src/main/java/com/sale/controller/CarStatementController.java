@@ -63,7 +63,7 @@ public class CarStatementController {
     }
 
     @GetMapping("/search")
-    public @ResponseBody List<CarStatementResponse> search(@RequestParam String name) {
+    public @ResponseBody List<CarStatementResponse> search(@RequestParam String name) throws CarStatementApiException {
         return carStatementService.search(name);
     }
 }

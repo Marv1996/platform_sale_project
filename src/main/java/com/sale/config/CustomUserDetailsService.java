@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sale.common.constants.ExceptionMessageConstants.AUTHORIZATION_PROBLEM;
+import static com.sale.common.constants.ExceptionMessageConstants.USERNAME_PASSWORD_PROBLEM;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -28,10 +31,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         try {
             userEntity = userRepository.getByEmail(username);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during authorization process");
+            throw new UserApiException(AUTHORIZATION_PROBLEM);
         }
         if (userEntity == null) {
-            throw new UserNotFoundException("Wrong username or password");
+            throw new UserNotFoundException(USERNAME_PASSWORD_PROBLEM);
         }
         List<String> roles = new ArrayList<>();
         roles.add(userEntity.getRole().toString());

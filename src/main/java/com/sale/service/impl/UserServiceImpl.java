@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sale.common.constants.ExceptionMessageConstants.*;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,7 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             result = userRepository.save(userEntity);
         } catch (Exception e) {
-            throw new UserApiException("Problem during saving user");
+            throw new UserApiException(SAVING_USER_PROBLEM);
         }
         emailSender.send(
                 request.getEmail(),
@@ -59,20 +61,20 @@ public class UserServiceImpl implements UserService {
         try {
             userEntity = userRepository.getByEmail(email);
         } catch (Exception e) {
-            throw new UserApiException("Problem during verification");
+            throw new UserApiException(VERIFICATION_PROBLEM);
         }
         if (userEntity == null) {
-            throw new UserNotFoundException("User not found with given email");
+            throw new UserNotFoundException(FOUND_USER_PROBLEM);
         }
         if (!userEntity.getVerifyCode().equals(verifyCode)) {
-            throw new UserBadRequestException("Incorrect verification code");
+            throw new UserBadRequestException(INCORRECT_VERIFICATION);
         }
         userEntity.setStatus(Status.ACTIVE);
         userEntity.setVerifyCode(null);
         try {
             userRepository.save(userEntity);
         } catch (Exception e) {
-            throw new UserApiException("Problem during verification");
+            throw new UserApiException(VERIFICATION_PROBLEM);
         }
         return true;
     }
@@ -83,10 +85,10 @@ public class UserServiceImpl implements UserService {
         try {
             userEntity = userRepository.findById(id);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during getting user");
+            throw new UserApiException(GETTING_USER_PROBLEM);
         }
         if (userEntity.isEmpty()) {
-            throw new UserNotFoundException("User not found with given ID");
+            throw new UserNotFoundException(FOUND_USER_PROBLEM);
         }
         return userEntity.get();
     }
@@ -97,7 +99,7 @@ public class UserServiceImpl implements UserService {
         try {
             userEntities = userRepository.findAll();
         } catch (Exception ex) {
-            throw new UserApiException("Problem during getting user");
+            throw new UserApiException(GETTING_USER_PROBLEM);
         }
         return userEntities;
     }
@@ -109,10 +111,10 @@ public class UserServiceImpl implements UserService {
         try {
             result = userRepository.findById(id);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during updating user");
+            throw new UserApiException(UPDATING_USER_PROBLEM);
         }
         if (result.isEmpty()) {
-            throw new UserNotFoundException("User not found with given details");
+            throw new UserNotFoundException(FOUND_USER_PROBLEM);
         }
         UserEntity userEntity = result.get();
         userEntity.setName(userRequest.getName());
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService {
         try {
             newUser = userRepository.save(userEntity);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during updating user");
+            throw new UserApiException(UPDATING_USER_PROBLEM);
         }
         return newUser;
     }
@@ -136,15 +138,15 @@ public class UserServiceImpl implements UserService {
         try {
             userEntity = userRepository.findById(id);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during deleting user");
+            throw new UserApiException(DELETING_USER_PROBLEM);
         }
         if (userEntity.isEmpty()) {
-            throw new UserNotFoundException("User not found with given details");
+            throw new UserNotFoundException(FOUND_USER_PROBLEM);
         }
         try {
             userRepository.deleteById(id);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during deleting user");
+            throw new UserApiException(DELETING_USER_PROBLEM);
         }
     }
 }

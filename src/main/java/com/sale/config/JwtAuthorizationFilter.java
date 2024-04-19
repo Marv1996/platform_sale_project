@@ -15,6 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.sale.common.constants.ExceptionMessageConstants.UNAUTHORIZED_PROBLEM;
+
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -46,7 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            throw new UserUnauthorizedException("Unauthorized");
+            throw new UserUnauthorizedException(UNAUTHORIZED_PROBLEM);
         }
         filterChain.doFilter(request, response);
     }

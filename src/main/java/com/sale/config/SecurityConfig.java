@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.sale.common.constants.SecurityConstants.GET_TOKEN_URL;
+import static com.sale.common.constants.SecurityConstants.SWAGGER_URL;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -39,7 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests()
-                .requestMatchers("/api/*/*/openapi/**", "/auth/token")
+                .requestMatchers(SWAGGER_URL, GET_TOKEN_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -12,6 +12,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.sale.common.constants.ExceptionMessageConstants.PASSWORD_PROBLEM;
+import static com.sale.common.constants.ExceptionMessageConstants.SHORT_PASSWORD;
+
 @Getter
 @Setter
 @Builder
@@ -54,7 +57,7 @@ public class UserRequest {
 
     public void validatePassword(String password) {
         if (password.length() < 8) {
-            throw new UserBadRequestException("Password is short");
+            throw new UserBadRequestException(SHORT_PASSWORD);
         }
 
         int countOfDigit = 0;
@@ -68,7 +71,7 @@ public class UserRequest {
             }
         }
         if (countOfDigit < 1 || countOfUppercase < 1) {
-            throw new UserBadRequestException("Password must contain at least one uppercase and one digit");
+            throw new UserBadRequestException(PASSWORD_PROBLEM);
         }
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import static com.sale.common.constants.ExceptionMessageConstants.TOKEN_TIME_PROBLEM;
+import static com.sale.common.constants.ExceptionMessageConstants.UNAUTHORIZED_PROBLEM;
+
 @Component
 public class JwtUtil {
 
@@ -50,9 +53,9 @@ public class JwtUtil {
             }
             return null;
         } catch (ExpiredJwtException ex) {
-            throw new UserUnauthorizedException("Token expired was overed");
+            throw new UserUnauthorizedException(TOKEN_TIME_PROBLEM);
         } catch (Exception ex) {
-            throw new UserUnauthorizedException("Unauthorized");
+            throw new UserUnauthorizedException(UNAUTHORIZED_PROBLEM);
         }
     }
 
@@ -68,7 +71,7 @@ public class JwtUtil {
         try {
             return claims.getExpiration().after(new Date());
         } catch (Exception ex) {
-            throw new UserUnauthorizedException("Token expired was overed");
+            throw new UserUnauthorizedException(TOKEN_TIME_PROBLEM);
         }
     }
 }

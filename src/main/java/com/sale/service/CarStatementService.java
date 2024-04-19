@@ -18,5 +18,5 @@ public interface CarStatementService {
 
     void delete(Integer id, String email) throws CarStatementApiException;
 
-    List<CarStatementResponse> search(String name);
+    List<CarStatementResponse> search(String name) throws CarStatementApiException;
 }

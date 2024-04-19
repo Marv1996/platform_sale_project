@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import static com.sale.common.constants.ExceptionMessageConstants.GETTING_TOKEN_PROBLEM;
+import static com.sale.common.constants.ExceptionMessageConstants.INVALID_USERNAME_PASSWORD;
+
 @Service
 public class TokenServiceImpl implements TokenService {
 
@@ -38,9 +41,9 @@ public class TokenServiceImpl implements TokenService {
             userEntity.setPassword("");
             token = jwtUtil.createToken(userEntity);
         } catch (BadCredentialsException ex) {
-            throw new UserBadRequestException("Invalid username or password");
+            throw new UserBadRequestException(INVALID_USERNAME_PASSWORD);
         } catch (Exception ex) {
-            throw new UserApiException("Problem during getting token");
+            throw new UserApiException(GETTING_TOKEN_PROBLEM);
         }
         return token;
     }

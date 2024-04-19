@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.sale.common.constants.ExceptionMessageConstants.*;
+
 @Service
 @Slf4j
 public class CarStatementServiceImpl implements CarStatementService {
@@ -57,7 +59,7 @@ public class CarStatementServiceImpl implements CarStatementService {
             try {
                 newStatement = statementRepository.save(statementEntity);
             } catch (Exception ex) {
-                throw new CarStatementApiException("Problem during creating new statement");
+                throw new CarStatementApiException(CREATING_STATEMENT_PROBLEM);
             }
             carStatementEntity.setStatementEntity(newStatement);
         }
@@ -69,7 +71,7 @@ public class CarStatementServiceImpl implements CarStatementService {
             carStatements.add(carStatementEntity);
             userRepository.save(userEntity);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during creating new statement");
+            throw new CarStatementApiException(CREATING_STATEMENT_PROBLEM);
         }
         return new ObjectMapper().convertValue(carStatementEntity, CarStatementResponse.class);
     }
@@ -80,10 +82,10 @@ public class CarStatementServiceImpl implements CarStatementService {
         try {
             carStatementEntity = carStatementRepository.findById(id);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during getting statement");
+            throw new CarStatementApiException(GETTING_STATEMENT_PROBLEM);
         }
         if (carStatementEntity.isEmpty()) {
-            throw new CarStatementNotFoundException("Statement not found with given details");
+            throw new CarStatementNotFoundException(STATEMENT_PROBLEM);
         }
         return new ObjectMapper().convertValue(carStatementEntity.get(), CarStatementResponse.class);
     }
@@ -118,10 +120,10 @@ public class CarStatementServiceImpl implements CarStatementService {
         try {
             carStatementEntities = carStatementRepository.findById(id);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during updating statement");
+            throw new CarStatementApiException(UPDATING_STATEMENT_PROBLEM);
         }
         if (carStatementEntities.isEmpty()) {
-            throw new CarStatementNotFoundException("Statement not found with given details");
+            throw new CarStatementNotFoundException(STATEMENT_PROBLEM);
         }
 
         StatementEntity statementEntity = StatementRequest.toStatementEntity(request);
@@ -141,7 +143,7 @@ public class CarStatementServiceImpl implements CarStatementService {
             try {
                 newStatement = statementRepository.save(statementEntity);
             } catch (Exception ex) {
-                throw new CarStatementApiException("Problem during creating new statement");
+                throw new CarStatementApiException(CREATING_STATEMENT_PROBLEM);
             }
             carStatementEntity.setStatementEntity(newStatement);
         }
@@ -159,7 +161,7 @@ public class CarStatementServiceImpl implements CarStatementService {
             userRepository.save(userEntity);
             newCarStatement = carStatementRepository.save(carStatementEntity);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during creating new statement");
+            throw new CarStatementApiException(CREATING_STATEMENT_PROBLEM);
         }
         log.info("End updating ");
         return new ObjectMapper().convertValue(newCarStatement, CarStatementResponse.class);
@@ -171,10 +173,10 @@ public class CarStatementServiceImpl implements CarStatementService {
         try {
             carStatementEntities = carStatementRepository.findById(id);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during deleting statement");
+            throw new CarStatementApiException(DELETING_STATEMENT_PROBLEM);
         }
         if (carStatementEntities.isEmpty()) {
-            throw new CarStatementNotFoundException("Statement not found with given details");
+            throw new CarStatementNotFoundException(STATEMENT_PROBLEM);
         }
 
         CarStatementEntity carStatementEntity = carStatementEntities.get();
@@ -196,14 +198,19 @@ public class CarStatementServiceImpl implements CarStatementService {
             }
             carStatementRepository.deleteById(id);
         } catch (Exception ex) {
-            throw new CarStatementApiException("Problem during deleting statement");
+            throw new CarStatementApiException(DELETING_STATEMENT_PROBLEM);
         }
     }
 
     @Override
-    public List<CarStatementResponse> search(String name) {
-        List<CarStatementEntity> search = carStatementRepository.search(name);
-        return new ObjectMapper().convertValue(search, new TypeReference<>() {
+    public List<CarStatementResponse> search(String name) throws CarStatementApiException {
+        List<CarStatementEntity> entities;
+        try {
+            entities = carStatementRepository.search(name);
+        } catch (Exception ex) {
+            throw new CarStatementApiException(SEARCHING_STATEMENT_PROBLEM);
+        }
+        return new ObjectMapper().convertValue(entities, new TypeReference<>() {
         });
     }
 }

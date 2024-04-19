@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import static com.sale.common.constants.ExceptionMessageConstants.INVALID_PRICE;
+import static com.sale.common.constants.ExceptionMessageConstants.PRICE_PROBLEM;
+
 @Getter
 @Setter
 public abstract class StatementRequest {
@@ -50,10 +53,10 @@ public abstract class StatementRequest {
         try {
             Integer.parseInt(price.toString());
         } catch (Exception ex) {
-            throw new StatementBadRequestException("Price is invalid");
+            throw new StatementBadRequestException(INVALID_PRICE);
         }
         if (price < 0) {
-            throw new StatementBadRequestException("Price of product can't be negative");
+            throw new StatementBadRequestException(PRICE_PROBLEM);
         }
     }
 }
